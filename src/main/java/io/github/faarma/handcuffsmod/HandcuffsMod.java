@@ -1,6 +1,7 @@
 package io.github.faarma.handcuffsmod;
 
 import io.github.faarma.handcuffsmod.common.item.ItemInit;
+import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -21,6 +22,8 @@ public class HandcuffsMod {
     public HandcuffsMod() {
         // Get the mod event bus for registration.
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        // Register network packets for the mod.
+        NetworkMessages.RegisterPackets();
         // Register custom items using the ItemInit class.
         ItemInit.Register(modEventBus);
     }
