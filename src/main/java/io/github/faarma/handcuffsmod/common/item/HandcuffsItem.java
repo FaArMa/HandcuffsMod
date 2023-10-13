@@ -1,5 +1,7 @@
 package io.github.faarma.handcuffsmod.common.item;
 
+import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
+import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -87,8 +89,10 @@ public class HandcuffsItem extends Item {
 
         if (isCuffed) {
             ItemUtils.setCuffed(this.targetPlayer, false);
+            NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(false, this.targetPlayer.getUUID()));
         } else {
             ItemUtils.setCuffed(this.targetPlayer, true);
+            NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(true, this.targetPlayer.getUUID()));
         }
     }
 }
