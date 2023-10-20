@@ -3,6 +3,7 @@ package io.github.faarma.handcuffsmod.common.event;
 import io.github.faarma.handcuffsmod.HandcuffsMod;
 import io.github.faarma.handcuffsmod.common.item.ItemUtils;
 import net.minecraft.util.ActionResultType;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +29,19 @@ public class EventHandler {
         if (ItemUtils.isPlayerCuffed(event.getPlayer())) {
             event.setCanceled(true);
             event.setCancellationResult(ActionResultType.FAIL);
+        }
+    }
+
+    /**
+     * Event handler for the EntityItemPickupEvent, which occurs when a player picks up an item.
+     * If the player is handcuffed, this method cancels the item pickup event.
+     *
+     * @param event The EntityItemPickupEvent that occurred.
+     */
+    @SubscribeEvent
+    public static void onEntityItemPickupEvent(EntityItemPickupEvent event) {
+        if (ItemUtils.isPlayerCuffed(event.getPlayer())) {
+            event.setCanceled(true);
         }
     }
 }
