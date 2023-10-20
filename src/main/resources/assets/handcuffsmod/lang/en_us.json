@@ -1,3 +1,7 @@
 {
-    "item.handcuffsmod.handcuffs": "Handcuffs"
+    "item.handcuffsmod.handcuffs": "Handcuffs",
+    "gui.handcuffsmod.self.cuffed": "You have handcuffed %s",
+    "gui.handcuffsmod.self.uncuffed": "You have uncuffed %s",
+    "gui.handcuffsmod.target.cuffed": "You have been handcuffed",
+    "gui.handcuffsmod.target.uncuffed": "You have been uncuffed"
 }

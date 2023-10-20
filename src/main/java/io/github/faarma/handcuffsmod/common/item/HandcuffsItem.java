@@ -96,11 +96,13 @@ public class HandcuffsItem extends Item {
             motionScaleData.resetScale();
             reachScaleData.resetScale();
             NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(false, this.targetPlayer.getUUID()));
+            ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, false);
         } else {
             ItemUtils.setCuffed(this.targetPlayer, true);
             motionScaleData.setScale(0.0F);
             reachScaleData.setScale(0.0F);
             NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(true, this.targetPlayer.getUUID()));
+            ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, true);
         }
     }
 }

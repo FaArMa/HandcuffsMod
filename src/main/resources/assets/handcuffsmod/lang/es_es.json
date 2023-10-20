@@ -1,3 +1,7 @@
 {
-    "item.handcuffsmod.handcuffs": "Esposas"
+    "item.handcuffsmod.handcuffs": "Esposas",
+    "gui.handcuffsmod.self.cuffed": "Has esposado a %s",
+    "gui.handcuffsmod.self.uncuffed": "Has desposado a %s",
+    "gui.handcuffsmod.target.cuffed": "Has sido esposado",
+    "gui.handcuffsmod.target.uncuffed": "Has sido desposado"
 }
