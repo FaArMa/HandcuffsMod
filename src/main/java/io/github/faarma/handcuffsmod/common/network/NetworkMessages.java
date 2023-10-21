@@ -1,8 +1,10 @@
 package io.github.faarma.handcuffsmod.common.network;
 
 import io.github.faarma.handcuffsmod.HandcuffsMod;
+import io.github.faarma.handcuffsmod.common.network.packet.ChangeHotbarSlotS2CPacket;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -37,6 +39,12 @@ public class NetworkMessages {
                 .decoder(HandcuffedPlayerS2CPacket::Decode)
                 .consumer(HandcuffedPlayerS2CPacket::Handle)
                 .add();
+
+        INSTANCE.messageBuilder(ChangeHotbarSlotS2CPacket.class, packetID++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ChangeHotbarSlotS2CPacket::Encode)
+                .decoder(ChangeHotbarSlotS2CPacket::Decode)
+                .consumer(ChangeHotbarSlotS2CPacket::Handle)
+                .add();
     }
 
     /**
@@ -47,5 +55,15 @@ public class NetworkMessages {
      */
     public static <MSG> void sentToAllPlayersTrackingPlayerAndSelf(PlayerEntity target, MSG message) {
         INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target), message);
+    }
+
+    /**
+     * Sends a message to a specific player.
+     *
+     * @param target  The player entity to receive the message.
+     * @param message The message to send.
+     */
+    public static <MSG> void sentToPlayer(ServerPlayerEntity target, MSG message) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> target), message);
     }
 }

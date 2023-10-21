@@ -1,8 +1,9 @@
 package io.github.faarma.handcuffsmod.client.network.packet;
 
-import java.util.function.Supplier;
 import io.github.faarma.handcuffsmod.common.item.ItemUtils;
+import io.github.faarma.handcuffsmod.common.network.packet.ChangeHotbarSlotS2CPacket;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
+import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -22,5 +23,16 @@ public class PacketHandler {
     public static void HandcuffedPlayerHandlePacket(HandcuffedPlayerS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         // Set the handcuffed status for the target player on the client-side.
         ItemUtils.setCuffed(Minecraft.getInstance().level.getPlayerByUUID(message.getTargetPlayer()), message.isCuffed());
+    }
+
+    /**
+     * Handles the ChangeHotbarSlotS2CPacket received from the server.
+     *
+     * @param message          The received packet message.
+     * @param contextSupplier  A supplier providing the network context.
+     */
+    @SuppressWarnings({ "resource", "static-access" })
+    public static void ChangeHotbarSlotHandlePacket(ChangeHotbarSlotS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+        Minecraft.getInstance().player.inventory.selected = message.getSlot();
     }
 }
