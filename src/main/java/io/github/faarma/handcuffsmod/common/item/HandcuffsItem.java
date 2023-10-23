@@ -10,8 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleTypes;
 
 /**
  * Custom item class representing Handcuffs in the game.
@@ -88,20 +86,14 @@ public class HandcuffsItem extends Item {
 
         ((PlayerEntity) entity).getCooldowns().addCooldown(item.getItem(), 50);
         boolean isCuffed = ItemUtils.isPlayerCuffed(this.targetPlayer);
-        ScaleData motionScaleData = ScaleTypes.MOTION.getScaleData(this.targetPlayer);
-        ScaleData reachScaleData = ScaleTypes.REACH.getScaleData(this.targetPlayer);
 
         if (isCuffed) {
             ItemUtils.setCuffed(this.targetPlayer, false);
-            motionScaleData.resetScale();
-            reachScaleData.resetScale();
             NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(false, this.targetPlayer.getUUID()));
             ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, false);
             ItemUtils.transferItemToUncuffed((PlayerEntity) entity, this.targetPlayer);
         } else {
             ItemUtils.setCuffed(this.targetPlayer, true);
-            motionScaleData.setScale(0.0F);
-            reachScaleData.setScale(0.0F);
             NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(true, this.targetPlayer.getUUID()));
             ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, true);
             ItemUtils.transferItemToCuffed((PlayerEntity) entity, this.targetPlayer);
