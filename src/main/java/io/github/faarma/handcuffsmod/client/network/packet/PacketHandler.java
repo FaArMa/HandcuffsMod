@@ -33,6 +33,9 @@ public class PacketHandler {
      */
     @SuppressWarnings({ "resource", "static-access" })
     public static void ChangeHotbarSlotHandlePacket(ChangeHotbarSlotS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+        // Close the player's screens (inventory, chat, etc.).
+        Minecraft.getInstance().player.closeContainer();
+        // Select the first slot of the hotbar
         Minecraft.getInstance().player.inventory.selected = message.getSlot();
     }
 }
