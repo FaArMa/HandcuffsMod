@@ -73,30 +73,26 @@ public class HandcuffsItem extends Item {
      */
     @Override
     public void onUseTick(World world, LivingEntity entity, ItemStack item, int tick) {
-        if (world.isClientSide()) {
+        if (world.isClientSide() || tick > 1) {
             return;
         }
-        if (((PlayerEntity) entity).getCooldowns().isOnCooldown(item.getItem())) {
-            ((PlayerEntity) entity).stopUsingItem();
-            return;
-        }
-        if (tick > 1) {
+        final PlayerEntity player = (PlayerEntity) entity;
+        if (player.getCooldowns().isOnCooldown(item.getItem())) {
+            player.stopUsingItem();
             return;
         }
 
-        ((PlayerEntity) entity).getCooldowns().addCooldown(item.getItem(), 50);
+        player.getCooldowns().addCooldown(item.getItem(), 50);
         boolean isCuffed = ItemUtils.isPlayerCuffed(this.targetPlayer);
 
+        ItemUtils.setCuffed(this.targetPlayer, !isCuffed);
+        NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(!isCuffed, this.targetPlayer.getUUID()));
+        ItemUtils.sendCuffedStatus(player, this.targetPlayer, !isCuffed);
+
         if (isCuffed) {
-            ItemUtils.setCuffed(this.targetPlayer, false);
-            NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(false, this.targetPlayer.getUUID()));
-            ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, false);
-            ItemUtils.transferItemToUncuffed((PlayerEntity) entity, this.targetPlayer);
+            ItemUtils.transferItemToUncuffed(player, this.targetPlayer);
         } else {
-            ItemUtils.setCuffed(this.targetPlayer, true);
-            NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(true, this.targetPlayer.getUUID()));
-            ItemUtils.sendCuffedStatus((PlayerEntity) entity, this.targetPlayer, true);
-            ItemUtils.transferItemToCuffed((PlayerEntity) entity, this.targetPlayer);
+            ItemUtils.transferItemToCuffed(player, this.targetPlayer);
         }
     }
 }
