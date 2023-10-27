@@ -10,11 +10,8 @@ import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationC2SPacket;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputEvent.RawMouseEvent;
@@ -35,23 +32,6 @@ public class EventHandler {
      * It is used in the onKeyInputEvent method to cancel specific key actions when a player is handcuffed.
      */
     private static Field clickCountField = ObfuscationReflectionHelper.findField(KeyBinding.class, "field_151474_i");
-
-    /**
-     * Event handler for the GuiOpenEvent event, which occurs when a GUI screen is opened.
-     * This method cancels the opening of the InventoryScreen if the player is handcuffed.
-     *
-     * @param event The GuiOpenEvent that occurred.
-     */
-    @SuppressWarnings("resource")
-    @SubscribeEvent
-    public static void onGuiOpenEvent(GuiOpenEvent event) {
-        if (Minecraft.getInstance().level == null || !(Minecraft.getInstance().player instanceof PlayerEntity)) {
-            return;
-        }
-        if (event.getGui() instanceof InventoryScreen && (ItemUtils.isPlayerCuffed(Minecraft.getInstance().player))) {
-            event.setCanceled(true);
-        }
-    }
 
     /**
      * Event handler for the MouseScrollEvent, which occurs when the mouse scroll wheel is moved.
@@ -81,14 +61,13 @@ public class EventHandler {
         if (mc.screen != null || !ItemUtils.isPlayerCuffed(mc.player) || event.getAction() != GLFW.GLFW_PRESS) {
             return;
         }
-        /*
-         * Mouse buttons that should be ignored if pressed
-         * - Gameplay
-         *   - Attack/Destroy
-         *   - Use Item/Place Block
-         */
-        if (event.getButton() == gs.keyAttack.getKey().getValue() || event.getButton() == gs.keyUse.getKey().getValue()) {
-            event.setCanceled(true);
+        // Keys that should be ignored if pressed
+        KeyBinding[] blacklistKeys = getBlacklistKeys(gs);
+        // Attempt to cancel the action of the "blacklistKeys" key.
+        for (KeyBinding keyBinding : blacklistKeys) {
+            if (event.getButton() == keyBinding.getKey().getValue()) {
+                event.setCanceled(true);
+            }
         }
     }
 
@@ -118,31 +97,8 @@ public class EventHandler {
                 NetworkMessages.sentToServer(new HandcuffedPlayerAnimationC2SPacket((byte) 0, mc.player.getUUID()));
             }
         }
-        /*
-         * Keys that should be ignored if pressed
-         * - Movement
-         *   - Jump
-         *   - Strafe Left
-         *   - Stafe Right
-         *   - Walk Backwards
-         *   - Walk Forwards
-         * - Gameplay
-         *   - Attack/Destroy
-         *   - Pick Block
-         *   - Use Item/Place Block
-         * - Inventory
-         *   - Drop Selected Item
-         *   - Swap Item With Offhand
-         *   - Hotbar Slot 1-9
-         */
-        KeyBinding[] blacklistKeys = {
-            gs.keyJump, gs.keyLeft, gs.keyRight, gs.keyDown, gs.keyUp,
-            gs.keyAttack, gs.keyPickItem, gs.keyUse,
-            gs.keyDrop, gs.keySwapOffhand,
-            gs.keyHotbarSlots[0], gs.keyHotbarSlots[1], gs.keyHotbarSlots[2],
-            gs.keyHotbarSlots[3], gs.keyHotbarSlots[4], gs.keyHotbarSlots[5],
-            gs.keyHotbarSlots[6], gs.keyHotbarSlots[7], gs.keyHotbarSlots[8]
-        };
+        // Keys that should be ignored if pressed
+        KeyBinding[] blacklistKeys = getBlacklistKeys(gs);
         // Attempt to cancel the action of the "blacklistKeys" key.
         for (KeyBinding keyBinding : blacklistKeys) {
             if (keyBinding.isDown()) {
@@ -157,5 +113,39 @@ public class EventHandler {
                 return;
             }
         }
+    }
+
+    /**
+     * Returns an array of key bindings that should be ignored.
+     *
+     * @param gs The GameSettings instance containing the player's key bindings.
+     * @return An array of KeyBinding objects representing the keys that should be ignored.
+     */
+    private static KeyBinding[] getBlacklistKeys(GameSettings gs) {
+        /*
+         * - Movement
+         *   - Jump
+         *   - Strafe Left
+         *   - Stafe Right
+         *   - Walk Backwards
+         *   - Walk Forwards
+         * - Gameplay
+         *   - Attack/Destroy
+         *   - Pick Block
+         *   - Use Item/Place Block
+         * - Inventory
+         *   - Drop Selected Item
+         *   - Open/Close Inventory
+         *   - Swap Item With Offhand
+         *   - Hotbar Slot 1-9
+         */
+        return new KeyBinding[] {
+            gs.keyJump, gs.keyLeft, gs.keyRight, gs.keyDown, gs.keyUp,
+            gs.keyAttack, gs.keyPickItem, gs.keyUse,
+            gs.keyDrop, gs.keyInventory, gs.keySwapOffhand,
+            gs.keyHotbarSlots[0], gs.keyHotbarSlots[1], gs.keyHotbarSlots[2],
+            gs.keyHotbarSlots[3], gs.keyHotbarSlots[4], gs.keyHotbarSlots[5],
+            gs.keyHotbarSlots[6], gs.keyHotbarSlots[7], gs.keyHotbarSlots[8]
+        };
     }
 }
