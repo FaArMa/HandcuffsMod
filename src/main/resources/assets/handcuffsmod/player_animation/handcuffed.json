@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "name": "handcuffed",
+    "author": "FaArMa",
+    "description": "The player will have his arms behind his back to be handcuffed",
+    "emote": {
+        "beginTick": 0,
+        "endTick": 15,
+        "stopTick": 20,
+        "isLoop": true,
+        "returnTick": 0,
+        "degrees": true,
+        "nsfw": false,
+        "moves": [
+            {
+                "tick": 0,
+                "rightArm": {
+                    "pitch": 33.75
+                }
+            },
+            {
+                "tick": 0,
+                "leftArm": {
+                    "pitch": 33.75
+                }
+            }
+        ]
+    }
+}

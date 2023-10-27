@@ -3,11 +3,14 @@ package io.github.faarma.handcuffsmod.common.event;
 import io.github.faarma.handcuffsmod.HandcuffsMod;
 import io.github.faarma.handcuffsmod.common.item.ItemUtils;
 import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
+import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationS2CPacket;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -60,5 +63,21 @@ public class EventHandler {
         if (ItemUtils.isPlayerCuffed(event.getPlayer())) {
             NetworkMessages.sentToPlayer((ServerPlayerEntity) event.getPlayer(), new HandcuffedPlayerS2CPacket(true, event.getPlayer().getUUID()));
         }
+    }
+
+    /**
+     * Event handler for the StartTracking event, which occurs when an entity starts being tracked by a player.
+     * This method checks if the tracked entity is a handcuffed player and sends the appropriate animation packet
+     * to the tracking player based on the crouching state of the tracked player.
+     *
+     * @param event The StartTracking event that occurred.
+     */
+    @SubscribeEvent
+    public static void onStartTracking(StartTracking event) {
+        if (!(event.getTarget() instanceof PlayerEntity) || !ItemUtils.isPlayerCuffed((PlayerEntity) event.getTarget())) {
+            return;
+        }
+        byte animation = (byte) (event.getTarget().isCrouching() ? 1 : 0);
+        NetworkMessages.sentToPlayer((ServerPlayerEntity) event.getPlayer(), new HandcuffedPlayerAnimationS2CPacket(animation, event.getTarget().getUUID()));
     }
 }

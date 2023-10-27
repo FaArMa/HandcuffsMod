@@ -1,8 +1,13 @@
 package io.github.faarma.handcuffsmod.client.event;
 
+import java.lang.reflect.Field;
+import org.lwjgl.glfw.GLFW;
+import dev.kosmx.playerAnim.api.layered.IAnimation;
+import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import io.github.faarma.handcuffsmod.HandcuffsMod;
 import io.github.faarma.handcuffsmod.common.item.ItemUtils;
-import java.lang.reflect.Field;
+import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
+import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationC2SPacket;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
@@ -17,7 +22,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Event handler for events that can occur on the client-side.
@@ -103,6 +107,18 @@ public class EventHandler {
         // Yes, if the first is null it means that you are playing (no inventory, no chat, etc.).
         if (mc.screen != null || !ItemUtils.isPlayerCuffed(mc.player)) {
             return;
+        }
+        // If the player is crouching, the animation must be changed.
+        if (event.getKey() == gs.keyShift.getKey().getValue()) {
+            ModifierLayer<IAnimation> animation = ItemUtils.getPlayerAnimation(mc.player);
+            if (event.getAction() == GLFW.GLFW_PRESS) {
+                animation.setAnimation(ItemUtils.getHandcuffedSneakAnimation());
+                NetworkMessages.sentToServer(new HandcuffedPlayerAnimationC2SPacket((byte) 1, mc.player.getUUID()));
+            }
+            if (event.getAction() == GLFW.GLFW_RELEASE) {
+                animation.setAnimation(ItemUtils.getHandcuffedAnimation());
+                NetworkMessages.sentToServer(new HandcuffedPlayerAnimationC2SPacket((byte) 0, mc.player.getUUID()));
+            }
         }
         /*
          * Keys that should be ignored if pressed

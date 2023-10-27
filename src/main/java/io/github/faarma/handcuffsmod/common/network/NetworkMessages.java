@@ -2,6 +2,8 @@ package io.github.faarma.handcuffsmod.common.network;
 
 import io.github.faarma.handcuffsmod.HandcuffsMod;
 import io.github.faarma.handcuffsmod.common.network.packet.ChangeHotbarSlotS2CPacket;
+import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationC2SPacket;
+import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationS2CPacket;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -45,6 +47,38 @@ public class NetworkMessages {
                 .decoder(ChangeHotbarSlotS2CPacket::Decode)
                 .consumer(ChangeHotbarSlotS2CPacket::Handle)
                 .add();
+
+        INSTANCE.messageBuilder(HandcuffedPlayerAnimationS2CPacket.class, packetID++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(HandcuffedPlayerAnimationS2CPacket::Encode)
+                .decoder(HandcuffedPlayerAnimationS2CPacket::Decode)
+                .consumer(HandcuffedPlayerAnimationS2CPacket::Handle)
+                .add();
+
+        INSTANCE.messageBuilder(HandcuffedPlayerAnimationC2SPacket.class, packetID++, NetworkDirection.PLAY_TO_SERVER)
+            .encoder(HandcuffedPlayerAnimationC2SPacket::Encode)
+            .decoder(HandcuffedPlayerAnimationC2SPacket::Decode)
+            .consumer(HandcuffedPlayerAnimationC2SPacket::Handle)
+            .add();
+    }
+
+    /**
+     * Sends a message to a specific player.
+     *
+     * @param target  The player entity to receive the message.
+     * @param message The message to send.
+     */
+    public static <MSG> void sentToPlayer(ServerPlayerEntity target, MSG message) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> target), message);
+    }
+
+    /**
+     * Sends a message to all players tracking a specified player entity.
+     *
+     * @param target  The player entity being tracked.
+     * @param message The message to send.
+     */
+    public static <MSG> void sentToAllPlayersTrackingPlayer(PlayerEntity target, MSG message) {
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> target), message);
     }
 
     /**
@@ -58,12 +92,11 @@ public class NetworkMessages {
     }
 
     /**
-     * Sends a message to a specific player.
+     * Sends a message to the server.
      *
-     * @param target  The player entity to receive the message.
      * @param message The message to send.
      */
-    public static <MSG> void sentToPlayer(ServerPlayerEntity target, MSG message) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> target), message);
+    public static <MSG> void sentToServer(MSG message) {
+        INSTANCE.sendToServer(message);
     }
 }

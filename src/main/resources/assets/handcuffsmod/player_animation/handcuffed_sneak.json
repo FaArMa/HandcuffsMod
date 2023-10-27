@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "name": "handcuffed_sneak",
+    "author": "FaArMa",
+    "description": "The crouched player will have his arms behind his back to be handcuffed",
+    "emote": {
+        "beginTick": 0,
+        "endTick": 15,
+        "stopTick": 20,
+        "isLoop": true,
+        "returnTick": 0,
+        "degrees": true,
+        "nsfw": false,
+        "moves": [
+            {
+                "tick": 0,
+                "rightArm": {
+                    "y": 5,
+                    "z": 2,
+                    "pitch": 56.25
+                }
+            },
+            {
+                "tick": 0,
+                "leftArm": {
+                    "y": 5,
+                    "z": 2,
+                    "pitch": 56.25
+                }
+            }
+        ]
+    }
+}

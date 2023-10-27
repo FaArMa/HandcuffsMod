@@ -1,12 +1,20 @@
 package io.github.faarma.handcuffsmod.common.item;
 
+import dev.kosmx.playerAnim.api.layered.IAnimation;
+import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
+import dev.kosmx.playerAnim.api.layered.ModifierLayer;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
+import io.github.faarma.handcuffsmod.HandcuffsMod;
 import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
 import io.github.faarma.handcuffsmod.common.network.packet.ChangeHotbarSlotS2CPacket;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -110,5 +118,40 @@ public class ItemUtils {
         target.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
         // Add the item to self's inventory
         self.inventory.add(itemInHand);
+    }
+
+    /**
+     * Retrieves the player's animation layer associated with the mod.
+     *
+     * @param player The player entity for which to retrieve the animation layer.
+     * @return The animation layer for the player.
+     */
+    @SuppressWarnings("unchecked")
+    public static ModifierLayer<IAnimation> getPlayerAnimation(PlayerEntity player) {
+        return (ModifierLayer<IAnimation>) PlayerAnimationAccess
+                .getPlayerAssociatedData((AbstractClientPlayerEntity) player)
+                .get(new ResourceLocation(HandcuffsMod.ModID, "animation"));
+    }
+
+    /**
+     * Retrieves a KeyframeAnimationPlayer for the "handcuffed" animation.
+     *
+     * @return A KeyframeAnimationPlayer for the "handcuffed" animation.
+     */
+    public static KeyframeAnimationPlayer getHandcuffedAnimation() {
+        return new KeyframeAnimationPlayer(
+                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.ModID, "handcuffed"))
+                );
+    }
+
+    /**
+     * Retrieves a KeyframeAnimationPlayer for the "handcuffed_sneak" animation.
+     *
+     * @return A KeyframeAnimationPlayer for the "handcuffed_sneak" animation.
+     */
+    public static KeyframeAnimationPlayer getHandcuffedSneakAnimation() {
+        return new KeyframeAnimationPlayer(
+                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.ModID, "handcuffed_sneak"))
+                );
     }
 }
