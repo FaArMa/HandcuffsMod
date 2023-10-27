@@ -23,14 +23,14 @@ public class PacketHandler {
      * @param message          The received packet message.
      * @param contextSupplier  A supplier providing the network context.
      */
-    @SuppressWarnings({ "resource", "static-access" })
-    public static void HandcuffedPlayerHandlePacket(HandcuffedPlayerS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+    @SuppressWarnings("resource")
+    public static void handcuffedPlayerHandlePacket(HandcuffedPlayerS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         // Set the handcuffed status for the target player on the client-side.
-        PlayerEntity targetPlayer = Minecraft.getInstance().level.getPlayerByUUID(message.getTargetPlayer());
-        ItemUtils.setCuffed(targetPlayer, message.isCuffed());
+        PlayerEntity targetPlayer = Minecraft.getInstance().level.getPlayerByUUID(HandcuffedPlayerS2CPacket.getTargetPlayer());
+        ItemUtils.setCuffed(targetPlayer, HandcuffedPlayerS2CPacket.isCuffed());
         // Add or remove the handcuff animation
         ModifierLayer<IAnimation> animation = ItemUtils.getPlayerAnimation(targetPlayer);
-        animation.setAnimation(message.isCuffed() ? ItemUtils.getHandcuffedAnimation() : null);
+        animation.setAnimation(HandcuffedPlayerS2CPacket.isCuffed() ? ItemUtils.getHandcuffedAnimation() : null);
     }
 
     /**
@@ -40,12 +40,12 @@ public class PacketHandler {
      * @param message          The received packet message.
      * @param contextSupplier  A supplier providing the network context.
      */
-    @SuppressWarnings({ "resource", "static-access" })
-    public static void HandcuffedPlayerAnimationHandlePacket(HandcuffedPlayerAnimationS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
-        PlayerEntity targetPlayer = Minecraft.getInstance().level.getPlayerByUUID(message.getTargetPlayer());
+    @SuppressWarnings("resource")
+    public static void handcuffedPlayerAnimationHandlePacket(HandcuffedPlayerAnimationS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+        PlayerEntity targetPlayer = Minecraft.getInstance().level.getPlayerByUUID(HandcuffedPlayerAnimationS2CPacket.getTargetPlayer());
         // Use the animation for handcuffed standing or crouching
         ModifierLayer<IAnimation> animation = ItemUtils.getPlayerAnimation(targetPlayer);
-        animation.setAnimation(message.getAnimation() == 0 ? ItemUtils.getHandcuffedAnimation() : ItemUtils.getHandcuffedSneakAnimation());
+        animation.setAnimation(HandcuffedPlayerAnimationS2CPacket.getAnimation() == 0 ? ItemUtils.getHandcuffedAnimation() : ItemUtils.getHandcuffedSneakAnimation());
     }
 
     /**
@@ -54,11 +54,11 @@ public class PacketHandler {
      * @param message          The received packet message.
      * @param contextSupplier  A supplier providing the network context.
      */
-    @SuppressWarnings({ "resource", "static-access" })
-    public static void ChangeHotbarSlotHandlePacket(ChangeHotbarSlotS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+    @SuppressWarnings("resource")
+    public static void changeHotbarSlotHandlePacket(ChangeHotbarSlotS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         // Close the player's screens (inventory, chat, etc.).
         Minecraft.getInstance().player.closeContainer();
         // Select the first slot of the hotbar
-        Minecraft.getInstance().player.inventory.selected = message.getSlot();
+        Minecraft.getInstance().player.inventory.selected = ChangeHotbarSlotS2CPacket.getSlot();
     }
 }

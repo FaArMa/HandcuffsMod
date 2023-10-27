@@ -18,13 +18,13 @@ public class ItemInit {
      * A DeferredRegister instance for items.
      * This allows for the deferred registration of items with ForgeRegistries.ITEMS.
      */
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HandcuffsMod.ModID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, HandcuffsMod.MOD_ID);
 
     /**
      * A RegistryObject that represents the HANDCUFFS item.
      * This object is used to register and retrieve the item during the game's initialization.
      */
-    private static final RegistryObject<Item> HANDCUFFS = ITEMS.register("handcuffs", () -> new HandcuffsItem());
+    public static final RegistryObject<Item> HANDCUFFS = ITEMS.register("handcuffs", () -> new HandcuffsItem());
 
     /**
      * Registers the items defined in this class with the specified event bus.
@@ -32,7 +32,7 @@ public class ItemInit {
      *
      * @param modEventBus The event bus on which the item registration should occur.
      */
-    public static void Register(final IEventBus modEventBus) {
+    public static void register(final IEventBus modEventBus) {
         ITEMS.register(modEventBus);
     }
 }

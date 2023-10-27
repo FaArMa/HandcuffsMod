@@ -9,12 +9,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 /**
  * The main class of the Handcuffs Mod.
  */
-@Mod(HandcuffsMod.ModID)
+@Mod(HandcuffsMod.MOD_ID)
 public class HandcuffsMod {
     /**
      * The Mod ID, which should match the entry in the META-INF/mods.toml file.
      */
-    public static final String ModID = "handcuffsmod";
+    public static final String MOD_ID = "handcuffsmod";
 
     /**
      * Constructor for the HandcuffsMod class.
@@ -23,8 +23,8 @@ public class HandcuffsMod {
         // Get the mod event bus for registration.
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // Register network packets for the mod.
-        NetworkMessages.RegisterPackets();
+        NetworkMessages.registerPackets();
         // Register custom items using the ItemInit class.
-        ItemInit.Register(modEventBus);
+        ItemInit.register(modEventBus);
     }
 }

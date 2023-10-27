@@ -23,7 +23,7 @@ public class HandcuffsItem extends Item {
     /**
      * The duration in ticks for using this item.
      */
-    private static final int useTimeTicks = 100;
+    private static final int USE_TIME_TICKS = 100;
 
     /**
      * Constructor for the HandcuffsItem class.
@@ -60,7 +60,7 @@ public class HandcuffsItem extends Item {
      */
     @Override
     public int getUseDuration(ItemStack item) {
-        return useTimeTicks;
+        return USE_TIME_TICKS;
     }
 
     /**

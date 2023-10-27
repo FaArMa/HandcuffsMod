@@ -25,7 +25,7 @@ public class NetworkMessages {
      * The main network channel instance for the mod.
      */
     private static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(HandcuffsMod.ModID, "main"),
+            new ResourceLocation(HandcuffsMod.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
@@ -33,31 +33,31 @@ public class NetworkMessages {
     /**
      * Registers network packets for the mod.
      */
-    public static void RegisterPackets() {
+    public static void registerPackets() {
         int packetID = 0;
 
         INSTANCE.messageBuilder(HandcuffedPlayerS2CPacket.class, packetID++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(HandcuffedPlayerS2CPacket::Encode)
-                .decoder(HandcuffedPlayerS2CPacket::Decode)
-                .consumer(HandcuffedPlayerS2CPacket::Handle)
+                .encoder(HandcuffedPlayerS2CPacket::encode)
+                .decoder(HandcuffedPlayerS2CPacket::decode)
+                .consumer(HandcuffedPlayerS2CPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(ChangeHotbarSlotS2CPacket.class, packetID++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(ChangeHotbarSlotS2CPacket::Encode)
-                .decoder(ChangeHotbarSlotS2CPacket::Decode)
-                .consumer(ChangeHotbarSlotS2CPacket::Handle)
+                .encoder(ChangeHotbarSlotS2CPacket::encode)
+                .decoder(ChangeHotbarSlotS2CPacket::decode)
+                .consumer(ChangeHotbarSlotS2CPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(HandcuffedPlayerAnimationS2CPacket.class, packetID++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(HandcuffedPlayerAnimationS2CPacket::Encode)
-                .decoder(HandcuffedPlayerAnimationS2CPacket::Decode)
-                .consumer(HandcuffedPlayerAnimationS2CPacket::Handle)
+                .encoder(HandcuffedPlayerAnimationS2CPacket::encode)
+                .decoder(HandcuffedPlayerAnimationS2CPacket::decode)
+                .consumer(HandcuffedPlayerAnimationS2CPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(HandcuffedPlayerAnimationC2SPacket.class, packetID++, NetworkDirection.PLAY_TO_SERVER)
-            .encoder(HandcuffedPlayerAnimationC2SPacket::Encode)
-            .decoder(HandcuffedPlayerAnimationC2SPacket::Decode)
-            .consumer(HandcuffedPlayerAnimationC2SPacket::Handle)
+            .encoder(HandcuffedPlayerAnimationC2SPacket::encode)
+            .decoder(HandcuffedPlayerAnimationC2SPacket::decode)
+            .consumer(HandcuffedPlayerAnimationC2SPacket::handle)
             .add();
     }
 

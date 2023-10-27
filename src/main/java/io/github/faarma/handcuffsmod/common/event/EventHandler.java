@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  * <br>
  * Server-Side: These events do not have access to net.minecraft.client or net.minecraftforge.client.
  */
-@Mod.EventBusSubscriber(modid = HandcuffsMod.ModID, bus = Bus.FORGE)
+@Mod.EventBusSubscriber(modid = HandcuffsMod.MOD_ID, bus = Bus.FORGE)
 public class EventHandler {
     /**
      * Event handler for the PlayerInteractEvent.RightClickItem event, which occurs when a player right-clicks an item.

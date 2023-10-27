@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
  * <br>
  * Client-Side: These events do not have access to net.minecraft.server or net.minecraftforge.server.
  */
-@Mod.EventBusSubscriber(modid = HandcuffsMod.ModID, bus = Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = HandcuffsMod.MOD_ID, bus = Bus.FORGE, value = Dist.CLIENT)
 public class EventHandler {
     /**
      * The clickCount field is a private field in the KeyBinding class that holds the click count of a key binding.
@@ -48,10 +48,8 @@ public class EventHandler {
         if (Minecraft.getInstance().level == null || !(Minecraft.getInstance().player instanceof PlayerEntity)) {
             return;
         }
-        if (event.getGui() instanceof InventoryScreen) {
-            if (ItemUtils.isPlayerCuffed(Minecraft.getInstance().player)) {
-                event.setCanceled(true);
-            }
+        if (event.getGui() instanceof InventoryScreen && (ItemUtils.isPlayerCuffed(Minecraft.getInstance().player))) {
+            event.setCanceled(true);
         }
     }
 

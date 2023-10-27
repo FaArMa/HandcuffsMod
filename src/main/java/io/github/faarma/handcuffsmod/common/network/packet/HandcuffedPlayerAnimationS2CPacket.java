@@ -40,7 +40,7 @@ public class HandcuffedPlayerAnimationS2CPacket {
      * @param message The HandcuffedPlayerAnimationS2CPacket message to encode.
      * @param buffer  The packet buffer to write data to.
      */
-    public static void Encode(HandcuffedPlayerAnimationS2CPacket message, PacketBuffer buffer) {
+    public static void encode(HandcuffedPlayerAnimationS2CPacket message, PacketBuffer buffer) {
         buffer.writeByte(animation);
         buffer.writeUUID(targetPlayer);
     }
@@ -51,7 +51,7 @@ public class HandcuffedPlayerAnimationS2CPacket {
      * @param buffer The packet buffer containing the encoded data.
      * @return A new HandcuffedPlayerAnimationS2CPacket instance.
      */
-    public static HandcuffedPlayerAnimationS2CPacket Decode(PacketBuffer buffer) {
+    public static HandcuffedPlayerAnimationS2CPacket decode(PacketBuffer buffer) {
         return new HandcuffedPlayerAnimationS2CPacket(buffer.readByte(), buffer.readUUID());
     }
 
@@ -61,11 +61,11 @@ public class HandcuffedPlayerAnimationS2CPacket {
      * @param message          The received packet message.
      * @param contextSupplier  A supplier providing the network context.
      */
-    public static void Handle(HandcuffedPlayerAnimationS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(HandcuffedPlayerAnimationS2CPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         contextSupplier.get().enqueueWork(() -> {
             // We are on the Client-Side
             // Should be handled in another class and wrapped via DistExecutor#unsafeRunWhenOn
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PacketHandler.HandcuffedPlayerAnimationHandlePacket(message, contextSupplier));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PacketHandler.handcuffedPlayerAnimationHandlePacket(message, contextSupplier));
         });
         contextSupplier.get().setPacketHandled(true);
     }

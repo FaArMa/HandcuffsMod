@@ -18,7 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  * <br>
  * Server-Side: These events do not have access to net.minecraft.client or net.minecraftforge.client.
  */
-@Mod.EventBusSubscriber(modid = HandcuffsMod.ModID, bus = Bus.MOD)
+@Mod.EventBusSubscriber(modid = HandcuffsMod.MOD_ID, bus = Bus.MOD)
 public class EventHandlerMod {
     /**
      * Event handler for the {@link FMLClientSetupEvent}, which occurs during client setup.
@@ -28,9 +28,9 @@ public class EventHandlerMod {
     @SubscribeEvent
     public static void onFMLClientSetupEvent(final FMLClientSetupEvent event) {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(
-                new ResourceLocation(HandcuffsMod.ModID, "animation"),
+                new ResourceLocation(HandcuffsMod.MOD_ID, "animation"),
                 42,
-                (AbstractClientPlayerEntity player) -> {return new ModifierLayer<IAnimation>();}
+                (AbstractClientPlayerEntity player) -> new ModifierLayer<IAnimation>()
         );
     }
 }

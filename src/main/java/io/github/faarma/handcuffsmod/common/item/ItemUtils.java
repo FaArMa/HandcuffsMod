@@ -23,6 +23,12 @@ import net.minecraft.util.text.TranslationTextComponent;
  */
 public class ItemUtils {
     /**
+     * The HANDCUFFED constant represents the tag used to store the handcuffed status in a player's persistent data.
+     * This tag is used to check and set whether a player is currently handcuffed.
+     */
+    private static final String HANDCUFFED = "handcuffed";
+
+    /**
      * Checks whether a player is currently handcuffed.
      *
      * @param player The player entity to check.
@@ -30,8 +36,8 @@ public class ItemUtils {
      */
     public static boolean isPlayerCuffed(PlayerEntity player) {
         CompoundNBT playerData = player.getPersistentData();
-        if (playerData.contains("handcuffed")) {
-            return playerData.getBoolean("handcuffed");
+        if (playerData.contains(HANDCUFFED)) {
+            return playerData.getBoolean(HANDCUFFED);
         }
         return false;
     }
@@ -44,7 +50,7 @@ public class ItemUtils {
      */
     public static void setCuffed(PlayerEntity player, boolean isCuffed) {
         CompoundNBT playerData = player.getPersistentData();
-        playerData.putBoolean("handcuffed", isCuffed);
+        playerData.putBoolean(HANDCUFFED, isCuffed);
     }
 
     /**
@@ -130,7 +136,7 @@ public class ItemUtils {
     public static ModifierLayer<IAnimation> getPlayerAnimation(PlayerEntity player) {
         return (ModifierLayer<IAnimation>) PlayerAnimationAccess
                 .getPlayerAssociatedData((AbstractClientPlayerEntity) player)
-                .get(new ResourceLocation(HandcuffsMod.ModID, "animation"));
+                .get(new ResourceLocation(HandcuffsMod.MOD_ID, "animation"));
     }
 
     /**
@@ -140,7 +146,7 @@ public class ItemUtils {
      */
     public static KeyframeAnimationPlayer getHandcuffedAnimation() {
         return new KeyframeAnimationPlayer(
-                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.ModID, "handcuffed"))
+                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.MOD_ID, HANDCUFFED))
                 );
     }
 
@@ -151,7 +157,7 @@ public class ItemUtils {
      */
     public static KeyframeAnimationPlayer getHandcuffedSneakAnimation() {
         return new KeyframeAnimationPlayer(
-                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.ModID, "handcuffed_sneak"))
+                PlayerAnimationRegistry.getAnimation(new ResourceLocation(HandcuffsMod.MOD_ID, "handcuffed_sneak"))
                 );
     }
 }

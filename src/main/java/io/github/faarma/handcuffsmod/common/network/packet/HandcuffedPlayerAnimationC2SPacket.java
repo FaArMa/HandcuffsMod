@@ -38,7 +38,7 @@ public class HandcuffedPlayerAnimationC2SPacket {
      * @param message The HandcuffedPlayerAnimationS2CPacket message to encode.
      * @param buffer  The packet buffer to write data to.
      */
-    public static void Encode(HandcuffedPlayerAnimationC2SPacket message, PacketBuffer buffer) {
+    public static void encode(HandcuffedPlayerAnimationC2SPacket message, PacketBuffer buffer) {
         buffer.writeByte(animation);
         buffer.writeUUID(targetPlayer);
     }
@@ -49,7 +49,7 @@ public class HandcuffedPlayerAnimationC2SPacket {
      * @param buffer The packet buffer containing the encoded data.
      * @return A new HandcuffedPlayerAnimationS2CPacket instance.
      */
-    public static HandcuffedPlayerAnimationC2SPacket Decode(PacketBuffer buffer) {
+    public static HandcuffedPlayerAnimationC2SPacket decode(PacketBuffer buffer) {
         return new HandcuffedPlayerAnimationC2SPacket(buffer.readByte(), buffer.readUUID());
     }
 
@@ -59,7 +59,7 @@ public class HandcuffedPlayerAnimationC2SPacket {
      * @param message          The received packet message.
      * @param contextSupplier  A supplier providing the network context.
      */
-    public static void Handle(HandcuffedPlayerAnimationC2SPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(HandcuffedPlayerAnimationC2SPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         contextSupplier.get().enqueueWork(() -> {
             // We are on the Server-Side
             NetworkMessages.sentToAllPlayersTrackingPlayer(contextSupplier.get().getSender(), new HandcuffedPlayerAnimationS2CPacket(animation, targetPlayer));
