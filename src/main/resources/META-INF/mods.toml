@@ -28,3 +28,10 @@ Permite esposar jugadores para que no puedan moverse ni interactuar con el entor
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.handcuffsmod]]
+    modId="playeranimator"
+    mandatory=true
+    versionRange="[0.4.0+1.16.5,)"
+    ordering="NONE"
+    side="BOTH"

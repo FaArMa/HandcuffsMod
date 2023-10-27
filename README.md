@@ -11,6 +11,7 @@ Un emocionante mod que introduce la mecánica de esposar a otros jugadores en **
 - **Entorno de desarrollo integrado** (IDE): [Eclipse IDE](https://eclipseide.org/)
 - **Modelado y Texturas**: [Blockbench](https://www.blockbench.net/)
 - **Cargador de Mods** (Mod Loader): [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html) <sup>1.16.5 - 36.2.34</sup>
+- **Dependencias**: [PlayerAnimator](https://www.curseforge.com/minecraft/mc-mods/playeranimator) <sup>0.4.0</sup>
 
 ## Aviso
 - Este es mi primer mod y fue hecho a pedido con la siguiente información:
