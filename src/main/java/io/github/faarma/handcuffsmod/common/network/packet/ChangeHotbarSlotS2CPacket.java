@@ -16,14 +16,14 @@ public class ChangeHotbarSlotS2CPacket {
     /**
      * The hotbar slot index to be communicated by the packet.
      */
-    private static int slot;
+    private static byte slot;
 
     /**
      * Constructs a new instance of the ChangeHotbarSlotS2CPacket with the selected hotbar slot index.
      *
      * @param slot The hotbar slot index to be communicated.
      */
-    public ChangeHotbarSlotS2CPacket(int slot) {
+    public ChangeHotbarSlotS2CPacket(byte slot) {
         ChangeHotbarSlotS2CPacket.slot = slot;
     }
 
@@ -34,7 +34,7 @@ public class ChangeHotbarSlotS2CPacket {
      * @param buffer  The packet buffer to write data to.
      */
     public static void encode(ChangeHotbarSlotS2CPacket message, PacketBuffer buffer) {
-        buffer.writeInt(slot);
+        buffer.writeByte(slot);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ChangeHotbarSlotS2CPacket {
      * @return A new ChangeHotbarSlotS2CPacket instance.
      */
     public static ChangeHotbarSlotS2CPacket decode(PacketBuffer buffer) {
-        return new ChangeHotbarSlotS2CPacket(buffer.readInt());
+        return new ChangeHotbarSlotS2CPacket(buffer.readByte());
     }
 
     /**
@@ -67,7 +67,7 @@ public class ChangeHotbarSlotS2CPacket {
      *
      * @return The hotbar slot index.
      */
-    public static final int getSlot() {
+    public static final byte getSlot() {
         return slot;
     }
 }

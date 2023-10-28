@@ -85,7 +85,7 @@ public class ItemUtils {
         // Select the first slot of the hotbar and drop the item in the main hand
         player.inventory.selected = 0;
         // Since the code is called from Server-Side, I have to send this to the player or it will not see that the slot changed.
-        NetworkMessages.sentToPlayer((ServerPlayerEntity) player, new ChangeHotbarSlotS2CPacket(0));
+        NetworkMessages.sentToPlayer((ServerPlayerEntity) player, new ChangeHotbarSlotS2CPacket((byte) 0));
         player.drop(true);
         // Drop the item in the offhand if it is not empty
         if (!player.getOffhandItem().isEmpty()) {
