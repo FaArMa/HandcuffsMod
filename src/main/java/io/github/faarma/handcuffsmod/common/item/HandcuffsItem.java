@@ -47,6 +47,9 @@ public class HandcuffsItem extends Item {
         if (!(target instanceof PlayerEntity)) {
             return ActionResultType.FAIL;
         }
+        if (player.getCooldowns().isOnCooldown(item.getItem())) {
+            return ActionResultType.FAIL;
+        }
         this.targetPlayer = (PlayerEntity) target;
         player.startUsingItem(hand);
         return ActionResultType.SUCCESS;
@@ -77,10 +80,6 @@ public class HandcuffsItem extends Item {
             return;
         }
         final PlayerEntity player = (PlayerEntity) entity;
-        if (player.getCooldowns().isOnCooldown(item.getItem())) {
-            player.stopUsingItem();
-            return;
-        }
 
         player.getCooldowns().addCooldown(item.getItem(), 50);
         boolean isCuffed = ItemUtils.isPlayerCuffed(this.targetPlayer);
@@ -94,5 +93,7 @@ public class HandcuffsItem extends Item {
         } else {
             ItemUtils.transferItemToCuffed(player, this.targetPlayer);
         }
+
+        player.stopUsingItem();
     }
 }
