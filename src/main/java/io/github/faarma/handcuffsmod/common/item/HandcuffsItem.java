@@ -1,5 +1,8 @@
 package io.github.faarma.handcuffsmod.common.item;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
 import net.minecraft.entity.LivingEntity;
@@ -17,9 +20,10 @@ import net.minecraft.world.World;
  */
 public class HandcuffsItem extends Item {
     /**
-     * The target player entity that will be affected when handcuffs are applied.
+     * A mapping of player UUIDs to their corresponding handcuffed player UUIDs.
+     * The key represents the handcuffer's UUID, and the value represents the handcuffed player's UUID.
      */
-    private PlayerEntity targetPlayer;
+    private static final Map<UUID, UUID> targetPlayers = new HashMap<>();
     /**
      * The duration in ticks for using this item.
      */
@@ -44,13 +48,10 @@ public class HandcuffsItem extends Item {
      */
     @Override
     public ActionResultType interactLivingEntity(ItemStack item, PlayerEntity player, LivingEntity target, Hand hand) {
-        if (!(target instanceof PlayerEntity)) {
+        if (!(target instanceof PlayerEntity) || hand.equals(Hand.OFF_HAND) || player.getCooldowns().isOnCooldown(item.getItem())) {
             return ActionResultType.FAIL;
         }
-        if (player.getCooldowns().isOnCooldown(item.getItem())) {
-            return ActionResultType.FAIL;
-        }
-        this.targetPlayer = (PlayerEntity) target;
+        targetPlayers.put(player.getUUID(), target.getUUID());
         player.startUsingItem(hand);
         return ActionResultType.SUCCESS;
     }
@@ -80,20 +81,22 @@ public class HandcuffsItem extends Item {
             return;
         }
         final PlayerEntity player = (PlayerEntity) entity;
+        final PlayerEntity targetPlayer = world.getPlayerByUUID(targetPlayers.get(player.getUUID()));
 
         player.getCooldowns().addCooldown(item.getItem(), 50);
-        boolean isCuffed = ItemUtils.isPlayerCuffed(this.targetPlayer);
+        boolean isCuffed = ItemUtils.isPlayerCuffed(targetPlayer);
 
-        ItemUtils.setCuffed(this.targetPlayer, !isCuffed);
-        NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(this.targetPlayer, new HandcuffedPlayerS2CPacket(!isCuffed, this.targetPlayer.getUUID()));
-        ItemUtils.sendCuffedStatus(player, this.targetPlayer, !isCuffed);
+        ItemUtils.setCuffed(targetPlayer, !isCuffed);
+        NetworkMessages.sentToAllPlayersTrackingPlayerAndSelf(targetPlayer, new HandcuffedPlayerS2CPacket(!isCuffed, targetPlayer.getUUID()));
+        ItemUtils.sendCuffedStatus(player, targetPlayer, !isCuffed);
 
         if (isCuffed) {
-            ItemUtils.transferItemToUncuffed(player, this.targetPlayer);
+            ItemUtils.transferItemToUncuffed(player, targetPlayer);
         } else {
-            ItemUtils.transferItemToCuffed(player, this.targetPlayer);
+            ItemUtils.transferItemToCuffed(player, targetPlayer);
         }
 
+        targetPlayers.remove(player.getUUID());
         player.stopUsingItem();
     }
 }
