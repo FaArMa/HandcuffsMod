@@ -106,7 +106,7 @@ public class EventHandler {
                 try {
                     clickCountField.setInt(keyBinding, 0);
                 } catch (IllegalAccessException e) {
-                    System.err.println(e.toString() + " (an attempt was made to cancel the pressed action but it failed)");
+                    HandcuffsMod.LOGGER.error(String.format("%s %s", e.toString(), "(an attempt was made to cancel the pressed action but it failed)"));
                 }
                 // Ensure the key is not considered pressed.
                 keyBinding.setDown(false);

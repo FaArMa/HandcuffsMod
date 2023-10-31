@@ -1,5 +1,7 @@
 package io.github.faarma.handcuffsmod;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import io.github.faarma.handcuffsmod.common.item.ItemInit;
 import io.github.faarma.handcuffsmod.common.network.NetworkMessages;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,6 +17,10 @@ public class HandcuffsMod {
      * The Mod ID, which should match the entry in the META-INF/mods.toml file.
      */
     public static final String MOD_ID = "handcuffsmod";
+    /**
+     * Directly reference a log4j logger for logging purposes.
+     */
+    public static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * Constructor for the HandcuffsMod class.
