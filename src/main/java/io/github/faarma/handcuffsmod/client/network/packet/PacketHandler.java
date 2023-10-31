@@ -8,6 +8,7 @@ import io.github.faarma.handcuffsmod.common.network.packet.ChangeHotbarSlotS2CPa
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerAnimationS2CPacket;
 import io.github.faarma.handcuffsmod.common.network.packet.HandcuffedPlayerS2CPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -60,5 +61,7 @@ public class PacketHandler {
         Minecraft.getInstance().player.closeContainer();
         // Select the first slot of the hotbar
         Minecraft.getInstance().player.inventory.selected = ChangeHotbarSlotS2CPacket.getSlot();
+        // Release any pressed key
+        KeyBinding.releaseAll();
     }
 }
