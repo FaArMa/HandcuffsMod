@@ -108,6 +108,7 @@ public class ItemUtils {
         // Transfer the item from self's main hand to target's main hand
         ItemStack itemInHand = self.getMainHandItem();
         ItemStack itemToTransfer = new ItemStack(itemInHand.getItem(), 1);
+        itemToTransfer.setTag(itemInHand.getTag());
         itemInHand.shrink(1);
         target.setItemInHand(Hand.MAIN_HAND, itemToTransfer);
     }
